@@ -1,5 +1,6 @@
 .vs/
 .vscode/
 
-**/bin
-**/obj
+Demo/
+packages/
+TSACertificates/
