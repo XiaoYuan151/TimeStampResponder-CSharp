@@ -1,8 +1,0 @@
-D:\Users\xiaoy\source\repos\TimeStampResponder-CSharp\LibTimeStamp\bin\Release\LibTimeStamp.dll
-D:\Users\xiaoy\source\repos\TimeStampResponder-CSharp\LibTimeStamp\bin\Release\LibTimeStamp.pdb
-D:\Users\xiaoy\source\repos\TimeStampResponder-CSharp\LibTimeStamp\bin\Release\BouncyCastle.Crypto.dll
-D:\Users\xiaoy\source\repos\TimeStampResponder-CSharp\LibTimeStamp\obj\Release\LibTimeStamp.csproj.AssemblyReference.cache
-D:\Users\xiaoy\source\repos\TimeStampResponder-CSharp\LibTimeStamp\obj\Release\LibTimeStamp.csproj.CoreCompileInputs.cache
-D:\Users\xiaoy\source\repos\TimeStampResponder-CSharp\LibTimeStamp\obj\Release\LibTimeS.60F67DC1.Up2Date
-D:\Users\xiaoy\source\repos\TimeStampResponder-CSharp\LibTimeStamp\obj\Release\LibTimeStamp.dll
-D:\Users\xiaoy\source\repos\TimeStampResponder-CSharp\LibTimeStamp\obj\Release\LibTimeStamp.pdb
