@@ -2,23 +2,19 @@
 using System.Globalization;
 using System.IO;
 using System.Net;
-using System.Runtime.ConstrainedExecution;
-using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
-using System.Xml.Linq;
 using LibTimeStamp;
 
 namespace Demo
 {
-    
     class Program
     {
         static TSResponder tsResponder_SHA1;
         static TSResponder tsResponder_SHA256;
         static readonly string SHA1Path = @"/SHA1/";
         static readonly string SHA256Path = @"/SHA256/";
+
         static void Main(string[] args)
         {
             PrintDesc();
@@ -60,7 +56,7 @@ namespace Demo
             while (true)
             {
                 HttpListenerContext ctx = listener.GetContext();
-                ThreadPool.QueueUserWorkItem(new WaitCallback(TaskProc), ctx);
+                ThreadPool.QueueUserWorkItem(TaskProc, ctx);
             }
         }
 
@@ -73,11 +69,12 @@ namespace Demo
                 "Please put your SHA1 TSA cert chain and key in the same folder of this program and name them as \"SHA1.crt\" and \"SHA1.key\".\r\n" +
                 "Put your SHA256 TSA cert chain and key in the same folder of this program and name them as \"SHA256.crt\" and \"SHA256.key\".\r\n" +
                 "This program must run in administrator mode in order to start the local http server!\r\n" +
-                "TSResponder accept UTC Time in the form of \"yyyy-MM-dd'T'HH:mm:ss\"  For example: \"2012-03-19T00:00:00\"\r\n" +
+                "TSResponder accept UTC Time in the form of \"yyyy-MM-dd'T'HH:mm:ss\". For example: \"2012-03-19T00:00:00\"\r\n" +
                 "\r\n" +
                 "Press any key to start server!"
                 );
         }
+
         static void TaskProc(object o)
         {
             HttpListenerContext ctx = (HttpListenerContext)o;
@@ -87,56 +84,38 @@ namespace Demo
             HttpListenerResponse response = ctx.Response;
             if (ctx.Request.HttpMethod != "POST")
             {
-                StreamWriter writer = new StreamWriter(response.OutputStream, Encoding.ASCII);
-                writer.WriteLine("TSA Server");
-                writer.Close();
+                using (StreamWriter writer = new StreamWriter(response.OutputStream, Encoding.ASCII))
+                {
+                    writer.WriteLine("TSA Server");
+                }
                 ctx.Response.Close();
             }
             else
             {
                 string log = "";
-                string date = "";
-                if (request.RawUrl.StartsWith(SHA1Path))
-                {
-                    date = request.RawUrl.Remove(0, SHA1Path.Length);
-                }
-                else
-                {
-                    date = request.RawUrl.Remove(0, SHA256Path.Length);
-                }
+                string date = request.RawUrl.StartsWith(SHA1Path) ? request.RawUrl.Remove(0, SHA1Path.Length) : request.RawUrl.Remove(0, SHA256Path.Length);
+
                 DateTime signTime;
                 if (!DateTime.TryParseExact(date, "yyyy-MM-dd'T'HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal, out signTime))
                     signTime = DateTime.UtcNow;
 
-                BinaryReader reader = new BinaryReader(request.InputStream);
-                byte[] bRequest = reader.ReadBytes((int)request.ContentLength64);
+                using (BinaryReader reader = new BinaryReader(request.InputStream))
+                {
+                    byte[] bRequest = reader.ReadBytes((int)request.ContentLength64);
+                    bool RFC;
+                    byte[] bResponse = request.RawUrl.StartsWith(SHA1Path) ? tsResponder_SHA1.GenResponse(bRequest, signTime, out RFC) : tsResponder_SHA256.GenResponse(bRequest, signTime, out RFC);
 
-                bool RFC;
-                byte[] bResponse;
-                if (request.RawUrl.StartsWith(SHA1Path))
-                {
-                    bResponse = tsResponder_SHA1.GenResponse(bRequest, signTime, out RFC);
+                    response.ContentType = RFC ? "application/timestamp-reply" : "application/octet-stream";
+                    log += RFC ? "RFC3161     \t" : "Authenticode\t";
+                    log += signTime;
+
+                    using (BinaryWriter writer = new BinaryWriter(response.OutputStream))
+                    {
+                        writer.Write(bResponse);
+                    }
+                    ctx.Response.Close();
+                    Console.WriteLine(log);
                 }
-                else
-                {
-                    bResponse = tsResponder_SHA256.GenResponse(bRequest, signTime, out RFC);
-                }
-                if (RFC)
-                {
-                    response.ContentType = "application/timestamp-reply";
-                    log += "RFC3161     \t";
-                }
-                else
-                {
-                    response.ContentType = "application/octet-stream";
-                    log += "Authenticode\t";
-                }
-                log += signTime;
-                BinaryWriter writer = new BinaryWriter(response.OutputStream);
-                writer.Write(bResponse);
-                writer.Close();
-                ctx.Response.Close();
-                Console.WriteLine(log);
             }
         }
     }
