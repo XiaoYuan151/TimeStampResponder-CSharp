@@ -1,0 +1,6 @@
+.vs/
+.vscode/
+
+**/bin/
+packages/
+TSACertificates/

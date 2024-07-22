@@ -1,0 +1,11 @@
+D:\Users\xiaoy\source\repos\TimeStampResponder-CSharp\Demo\bin\Release\Demo.exe.config
+D:\Users\xiaoy\source\repos\TimeStampResponder-CSharp\Demo\bin\Release\Demo.exe
+D:\Users\xiaoy\source\repos\TimeStampResponder-CSharp\Demo\bin\Release\Demo.pdb
+D:\Users\xiaoy\source\repos\TimeStampResponder-CSharp\Demo\bin\Release\LibTimeStamp.dll
+D:\Users\xiaoy\source\repos\TimeStampResponder-CSharp\Demo\bin\Release\BouncyCastle.Crypto.dll
+D:\Users\xiaoy\source\repos\TimeStampResponder-CSharp\Demo\bin\Release\LibTimeStamp.pdb
+D:\Users\xiaoy\source\repos\TimeStampResponder-CSharp\Demo\obj\Release\Demo.csproj.AssemblyReference.cache
+D:\Users\xiaoy\source\repos\TimeStampResponder-CSharp\Demo\obj\Release\Demo.csproj.CoreCompileInputs.cache
+D:\Users\xiaoy\source\repos\TimeStampResponder-CSharp\Demo\obj\Release\Demo.csproj.Up2Date
+D:\Users\xiaoy\source\repos\TimeStampResponder-CSharp\Demo\obj\Release\Demo.exe
+D:\Users\xiaoy\source\repos\TimeStampResponder-CSharp\Demo\obj\Release\Demo.pdb
