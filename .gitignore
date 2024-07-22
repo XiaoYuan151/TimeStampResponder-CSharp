@@ -1,6 +1,12 @@
 .vs/
 .vscode/
 
+<<<<<<< HEAD
 Demo/
 packages/
 TSACertificates/
+=======
+TSACertificates/
+packages/
+Demo/
+>>>>>>> e4e52822a41407a83bf49b27b6254fee7bc7f336
